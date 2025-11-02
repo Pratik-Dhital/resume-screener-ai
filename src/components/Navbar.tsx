@@ -1,11 +1,12 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -42,10 +43,10 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
               Login
             </Button>
-            <Button size="sm" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+            <Button size="sm" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90" onClick={() => navigate("/signup")}>
               Sign Up
             </Button>
           </div>
@@ -76,10 +77,10 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" onClick={() => { navigate("/login"); setIsOpen(false); }}>
                 Login
               </Button>
-              <Button size="sm" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              <Button size="sm" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90" onClick={() => { navigate("/signup"); setIsOpen(false); }}>
                 Sign Up
               </Button>
             </div>

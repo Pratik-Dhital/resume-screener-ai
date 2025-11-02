@@ -1,13 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Eye } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import CandidateCard from "@/components/CandidateCard";
 
 interface Candidate {
   id: number;
@@ -72,7 +66,6 @@ const mockCandidates: Candidate[] = [
 const Dashboard = () => {
   const [sortBy, setSortBy] = useState("score");
   const [candidates, setCandidates] = useState(mockCandidates);
-  const navigate = useNavigate();
 
   const handleSort = (value: string) => {
     setSortBy(value);
@@ -88,19 +81,6 @@ const Dashboard = () => {
     setCandidates(sorted);
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 85) return "text-green-600";
-    if (score >= 70) return "text-blue-600";
-    return "text-orange-600";
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-  };
 
   return (
     <div className="min-h-screen bg-background py-12">
@@ -133,65 +113,7 @@ const Dashboard = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {candidates.map((candidate, index) => (
-              <motion.div
-                key={candidate.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <Card className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="w-12 h-12">
-                        <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground font-semibold">
-                          {getInitials(candidate.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className="font-semibold text-foreground">{candidate.name}</h3>
-                        <p className="text-sm text-muted-foreground">{candidate.email}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Experience</p>
-                      <p className="font-medium text-foreground">{candidate.experience}</p>
-                    </div>
-
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Skills</p>
-                      <div className="flex flex-wrap gap-2">
-                        {candidate.skills.map((skill, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <p className="text-sm text-muted-foreground">Match Score</p>
-                        <span className={`text-lg font-bold ${getScoreColor(candidate.matchScore)}`}>
-                          {candidate.matchScore}%
-                        </span>
-                      </div>
-                      <Progress value={candidate.matchScore} className="h-2" />
-                    </div>
-
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      onClick={() => navigate(`/candidate/${candidate.id}`)}
-                    >
-                      <Eye className="mr-2" size={16} />
-                      View Details
-                    </Button>
-                  </div>
-                </Card>
-              </motion.div>
+              <CandidateCard key={candidate.id} candidate={candidate} index={index} />
             ))}
           </div>
         </motion.div>
